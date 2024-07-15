@@ -19,10 +19,10 @@ import static org.fallen.pixelmonnbt.utils.sendCommandReply.reply;
 public class pixelmonnbtRouterCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        String[] subCommandsArr = {"help", "save", "loadBackup"};
+        String[] subCommandsArr = {"help", "save", "load"};
         List<String> subCommands = Arrays.stream(subCommandsArr).toList();
 
-        boolean invalidSubCommand = args.length > 0 && !subCommands.contains(args[0].toLowerCase());
+        boolean invalidSubCommand = args.length > 0 && !subCommands.contains(args[0]);
 
         if (args.length < 1) {
             reply(sender, command.getUsage());
@@ -102,8 +102,8 @@ public class pixelmonnbtRouterCommand implements CommandExecutor {
             } catch (IllegalArgumentException e) {
                 reply(sender, ChatColor.YELLOW + "Command Syntax: " + commandSyntax);
             }
-        } else if (args[0].equalsIgnoreCase("loadBackup")) {
-            String commandSyntax = "/pixelmonnbt loadBackup <filename>";
+        } else if (args[0].equalsIgnoreCase("load")) {
+            String commandSyntax = "/pixelmonnbt load <filename>";
 
             int argCount = args.length;
             if (argCount < 2) {
