@@ -19,7 +19,7 @@ import static org.fallen.pixelmonnbt.utils.sendCommandReply.reply;
 public class pixelmonnbtRouterCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        String[] subCommandsArr = {"help", "save", "load"};
+        String[] subCommandsArr = {"help", "save", "loadBackup"};
         List<String> subCommands = Arrays.stream(subCommandsArr).toList();
 
         boolean invalidSubCommand = args.length > 0 && !subCommands.contains(args[0].toLowerCase());
