@@ -1,0 +1,11 @@
+name: PixelmonNBT
+version: '${version}'
+main: org.fallen.pixelmonnbt.PixelmonNBT
+api-version: '1.16'
+load: STARTUP
+authors: [ Isaiah Petrichor ]
+commands:
+  pixelmonnbt:
+    description: "Master command for PixelmonNBT, try /pixelmonnbt help"
+    usage: "For usage: /terp help"
+depend: [ NBTAPI ]
