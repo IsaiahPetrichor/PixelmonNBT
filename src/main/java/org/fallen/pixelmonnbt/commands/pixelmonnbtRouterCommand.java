@@ -2,13 +2,17 @@ package org.fallen.pixelmonnbt.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
+import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.fallen.pixelmonnbt.commands.core.loadNBT;
+import org.fallen.pixelmonnbt.commands.core.saveNBT;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static org.fallen.pixelmonnbt.utils.sendCommandReply.reply;
 
@@ -36,53 +40,83 @@ public class pixelmonnbtRouterCommand implements CommandExecutor {
             reply(sender, info);
 
         } else if (args[0].equalsIgnoreCase("save")) {
-            // ex. /pixelmonnbt save Route11_LAND false
-            String commandSyntax = "/pixelmonnbt <action: save||load> <filename> <overwrite: true||false> <x?> <y?> <z?>";
+            String commandSyntax = "/pixelmonnbt save <filename> <overwrite: true || false> <x?> <y?> <z?>";
+
+            try {
+
+                int argCount = args.length;
+                if (argCount < 2) {
+                    reply(sender, commandSyntax);
+                }
+
+                // Get filename
+                String filename = "";
+                if (argCount >= 2) {
+                    filename = args[1];
+                }
+
+                // Get overwrite
+                boolean overwrite = false;
+                if (argCount >= 3) {
+                    if (Objects.equals(args[2], "true") || Objects.equals(args[2], "false")) {
+
+                        overwrite = Boolean.parseBoolean(args[2]);
+                    } else {
+                        throw new IllegalArgumentException();
+                    }
+                }
+
+                // require location for server
+                if (argCount < 4 && sender instanceof Server) {
+                    reply(
+                            sender,
+                            "To run this from console, please provide NBT data location and world name.\nCommand syntax: " + commandSyntax);
+                }
+
+                BlockState blockState = null;
+
+                if (argCount >= 6) {
+                    int x;
+                    int y;
+                    int z;
+                    try {
+                        x = Integer.parseInt(args[3]);
+                        y = Integer.parseInt(args[4]);
+                        z = Integer.parseInt(args[5]);
+
+                        blockState = sender.getServer().getWorlds().get(0).getBlockAt(x, y, z).getState();
+                    } catch (Exception e) {
+                        reply(sender, String.valueOf(e));
+                    }
+                } else {
+                    try {
+                        Player player = (Player) sender;
+                        blockState = Objects.requireNonNull(player.getTargetBlockExact(30)).getState();
+                    } catch (NullPointerException e) {
+                        reply(sender, "Couldn't get target block");
+                    }
+                }
+
+                new saveNBT(sender, blockState, filename, overwrite);
+
+            } catch (IllegalArgumentException e) {
+                reply(sender, ChatColor.YELLOW + "Command Syntax: " + commandSyntax);
+            }
+        } else if (args[0].equalsIgnoreCase("loadBackup")) {
+            String commandSyntax = "/pixelmonnbt loadBackup <filename>";
+
+            int argCount = args.length;
+            if (argCount < 2) {
+                reply(sender, commandSyntax);
+            }
 
             // Get filename
             String filename = "";
-            if (!args[1].isEmpty()) {
+            if (argCount >= 2) {
                 filename = args[1];
             }
 
-            // Get overwrite
-            boolean overwrite = false;
-            if (!args[2].isEmpty()) {
-                try {
-                    overwrite = Boolean.parseBoolean(args[2]);
-                } catch (Exception ex) {
-                    reply(sender, "invalid argument, command syntax: " + commandSyntax);
-                }
-            }
-
-            // require location for server
-            if (args[3].isEmpty() && sender instanceof Server) {
-                reply(
-                        sender,
-                        "To run this from console, please provide NBT data location.\nCommand syntax: " + commandSyntax);
-            }
-
-            if (!args[3].isEmpty()) {
-                int x;
-                int y;
-                int z;
-                try {
-                    x = Integer.parseInt(args[3]);
-                    y = Integer.parseInt(args[4]);
-                    z = Integer.parseInt(args[5]);
-                } catch (Exception ex) {
-                    reply(sender, String.valueOf(ex));
-                }
-            } else {
-                Player player = (Player) sender;
-                reply(sender, player.getEyeLocation().toString());
-            }
-
-            // save NBT
-            //            new saveNBT();
-        } else if (args[0].equalsIgnoreCase("load")) {
-            // load NBT
-            reply(sender, "not implemented yet");
+            new loadNBT(sender, filename);
         }
 
         return true;
