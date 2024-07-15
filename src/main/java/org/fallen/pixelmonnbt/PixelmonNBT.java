@@ -13,8 +13,6 @@ public final class PixelmonNBT extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        // Register Commands
         getCommand("pixelmonnbt").setExecutor(new pixelmonnbtRouterCommand());
-        // TODO: load command
     }
 }

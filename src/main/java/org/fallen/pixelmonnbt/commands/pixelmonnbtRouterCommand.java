@@ -1,9 +1,11 @@
 package org.fallen.pixelmonnbt.commands;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,8 +36,50 @@ public class pixelmonnbtRouterCommand implements CommandExecutor {
             reply(sender, info);
 
         } else if (args[0].equalsIgnoreCase("save")) {
+            // ex. /pixelmonnbt save Route11_LAND false
+            String commandSyntax = "/pixelmonnbt <action: save||load> <filename> <overwrite: true||false> <x?> <y?> <z?>";
+
+            // Get filename
+            String filename = "";
+            if (!args[1].isEmpty()) {
+                filename = args[1];
+            }
+
+            // Get overwrite
+            boolean overwrite = false;
+            if (!args[2].isEmpty()) {
+                try {
+                    overwrite = Boolean.parseBoolean(args[2]);
+                } catch (Exception ex) {
+                    reply(sender, "invalid argument, command syntax: " + commandSyntax);
+                }
+            }
+
+            // require location for server
+            if (args[3].isEmpty() && sender instanceof Server) {
+                reply(
+                        sender,
+                        "To run this from console, please provide NBT data location.\nCommand syntax: " + commandSyntax);
+            }
+
+            if (!args[3].isEmpty()) {
+                int x;
+                int y;
+                int z;
+                try {
+                    x = Integer.parseInt(args[3]);
+                    y = Integer.parseInt(args[4]);
+                    z = Integer.parseInt(args[5]);
+                } catch (Exception ex) {
+                    reply(sender, String.valueOf(ex));
+                }
+            } else {
+                Player player = (Player) sender;
+                reply(sender, player.getEyeLocation().toString());
+            }
+
             // save NBT
-            reply(sender, "not implemented yet");
+            //            new saveNBT();
         } else if (args[0].equalsIgnoreCase("load")) {
             // load NBT
             reply(sender, "not implemented yet");
