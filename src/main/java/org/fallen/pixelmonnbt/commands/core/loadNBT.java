@@ -61,8 +61,6 @@ public class loadNBT {
                     nbt.setInteger("y", block.getY());
                     nbt.setInteger("z", block.getZ());
                 });
-
-                reply(sender, block.toString());
             }
 
         } catch (IOException e) {

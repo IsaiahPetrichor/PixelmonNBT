@@ -2,6 +2,7 @@ package org.fallen.pixelmonnbt.commands.core;
 
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTFile;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.CommandSender;
 
@@ -20,8 +21,11 @@ public class saveNBT {
         } else {
             String fullFilePath = "plugins\\pixelmon-nbt\\" + filename + ".nbt";
 
-            NBT.modify(blockState, nbt -> {
+            NBT.get(blockState, nbt -> {
                 try {
+                    ReadWriteNBT nbtData = NBT.createNBTObject();
+                    nbtData.mergeCompound(nbt);
+
                     NBTFile file = new NBTFile(new File(fullFilePath));
 
                     if (overwrite) {
@@ -52,11 +56,11 @@ public class saveNBT {
                     yLocations.add(blockState.getY());
                     zLocations.add(blockState.getZ());
 
-                    nbt.setIntArray("x", xLocations.stream().mapToInt(i -> i).toArray());
-                    nbt.setIntArray("y", yLocations.stream().mapToInt(i -> i).toArray());
-                    nbt.setIntArray("z", zLocations.stream().mapToInt(i -> i).toArray());
+                    nbtData.setIntArray("x", xLocations.stream().mapToInt(i -> i).toArray());
+                    nbtData.setIntArray("y", yLocations.stream().mapToInt(i -> i).toArray());
+                    nbtData.setIntArray("z", zLocations.stream().mapToInt(i -> i).toArray());
 
-                    file.mergeCompound(nbt);
+                    file.mergeCompound(nbtData);
                     file.save();
                     reply(sender, "File saved to " + sender.getServer().getWorldContainer().getPath() + fullFilePath);
                 } catch (IOException e) {
