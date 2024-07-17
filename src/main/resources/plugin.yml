@@ -7,5 +7,5 @@ authors: [ Isaiah Petrichor ]
 commands:
   pixelmonnbt:
     description: "Master command for PixelmonNBT, try /pixelmonnbt help"
-    usage: "For usage: /terp help"
+    usage: "For usage: /pixelmonnbt help"
 depend: [ NBTAPI ]

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PixelmonNBT.main.iml" filepath="$PROJECT_DIR$/.idea/modules/PixelmonNBT.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/TerrainPreserver.main.iml" filepath="$PROJECT_DIR$/.idea/modules/TerrainPreserver.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.fallen.TerrainPreserver.main.iml" filepath="$PROJECT_DIR$/.idea/modules/org.fallen.TerrainPreserver.main.iml" />
     </modules>
   </component>
 </project>
